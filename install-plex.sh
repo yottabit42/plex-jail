@@ -14,6 +14,8 @@
 #
 # Jacob McDonald
 # Revision 170422a-yottabit
+#
+# Licensed under BSD-3-Clause, the Modified BSD License
 
 configDir=$(dialog --no-lines --stdout --inputbox "Persistent storage is:" \
 0 0 /config) || exit
