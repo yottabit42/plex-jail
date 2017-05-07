@@ -12,6 +12,7 @@
 # Also available in a convenient Google Doc:
 # https://docs.google.com/document/d/1LSr3J6hdnCDQHfiH45K3HMvEqzbug7GeUeDa_6b_Hhc
 #
+# Jacob McDonald
 # Revision 170422a-yottabit
 
 configDir=$(dialog --no-lines --stdout --inputbox "Persistent storage is:" \
