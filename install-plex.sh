@@ -39,6 +39,7 @@ fi
 
 service plexmediaserver_plexpass stop
 service plexmediaserver stop
+pkill -fl Plex
 
 /usr/sbin/pkg update
 /usr/sbin/pkg upgrade --yes
