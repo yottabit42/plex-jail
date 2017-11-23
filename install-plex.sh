@@ -13,14 +13,14 @@
 # https://docs.google.com/document/d/1LSr3J6hdnCDQHfiH45K3HMvEqzbug7GeUeDa_6b_Hhc
 #
 # Jacob McDonald
-# Revision 170422a-yottabit
+# Revision 171123a-yottabit
 #
 # Licensed under BSD-3-Clause, the Modified BSD License
 
 configDir=$(dialog --no-lines --stdout --inputbox "Persistent storage is:" \
 0 0 /config) || exit
 
-if [ -d "/$configDir" ] ; then
+if [ -d "$configDir" ] ; then
   echo "$configDir exists, like a boss!"
 else
   echo "$configDir does not exist, so exiting (you might want to link a dataset)."
@@ -30,23 +30,38 @@ fi
 if dialog --no-lines --yesno "Do you have a Plex Pass subscription?" 0 0 ; then
   echo "Plex Pass selected! You rock!"
   plexTrain="plexmediaserver-plexpass"
+  plexData="plexdata-plexpass"
 else
   echo "Regular Plex selected."
   plexTrain="plexmediaserver"
+  plexData="plexdata"
 fi
 
 service plexmediaserver_plexpass stop
 service plexmediaserver stop
 
-/usr/sbin/pkg update || exit
-/usr/sbin/pkg upgrade --yes || exit
-/usr/sbin/pkg install --yes $plexTrain || exit
-/usr/sbin/pkg clean --yes || exit
+/usr/sbin/pkg update
+/usr/sbin/pkg upgrade --yes
+/usr/sbin/pkg install --yes $plexTrain
+/usr/sbin/pkg clean --yes
 
-[ ! -d "/$configDir/$plexTrain" ] && \
-cp -R "/usr/local/share/$plexTrain" "/$configDir/." || exit
-rm -R "/usr/local/share/$plexTrain/" || exit
-ln -s "/$configDir/$plexTrain" "/usr/local/share/$plexTrain" || exit
+if [ ! -d "$configDir/$plexTrain" ] ; then
+  cp -Rv "/usr/local/share/$plexTrain" "$configDir/." || exit
+  rm -Rv "/usr/local/share/$plexTrain/" || exit
+  ln -s "$configDir/$plexTrain" "/usr/local/share/$plexTrain" || exit
+  echo "Relocated $plexTrain."
+else
+  echo "$config/$plexTrain already exists."
+fi
+
+if [ ! -d "$configDir/$plexData" ] ; then
+  cp -Rv "/usr/local/$plexData" "$configDir/." || exit
+  rm -Rv "/usr/local/$plexData/" || exit
+  ln -s "$configDir/$plexData" "/usr/local/$plexData" || exit
+  echo "Relocated $plexData."
+else
+  echo "$config/$plexData already exists."
+fi
 
 if [ "$plexTrain" = "plexmediaserver-plexpass" ] ; then
   sysrc plexmediaserver_plexpass_enable=YES || exit
@@ -58,5 +73,7 @@ fi
 
 ip="`ifconfig | grep -v 127.0.0.1 | sed -n '/.inet /{s///;s/ .*//;p;}'`:32400/web"
 echo "You should be able to start configuration of Plex on: $ip"
-echo "Default uid:gid for Plex is 972:972. You may need to adjust manually if\
-you are having permissions problems to your linked in media dataset(s)"
+echo "Default uid:gid for Plex is 972:972. You may need to adjust manually if"
+echo "you are having permissions problems to your linked in media dataset(s)"
+echo "If you change the uid:gid, remember to also chown -R on everything in"
+echo "$configDir"
