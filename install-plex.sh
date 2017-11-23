@@ -13,7 +13,7 @@
 # https://docs.google.com/document/d/1LSr3J6hdnCDQHfiH45K3HMvEqzbug7GeUeDa_6b_Hhc
 #
 # Jacob McDonald
-# Revision 171123a-yottabit
+# Revision 171123c-yottabit
 #
 # Licensed under BSD-3-Clause, the Modified BSD License
 
@@ -47,8 +47,7 @@ pkill -fl Plex
 /usr/sbin/pkg clean --yes
 
 if [ ! -d "$configDir/$plexTrain" ] ; then
-  cp -Rv "/usr/local/share/$plexTrain" "$configDir/." || exit
-  rm -Rv "/usr/local/share/$plexTrain/" || exit
+  mv -Rv "/usr/local/share/$plexTrain" "$configDir/." || exit
   ln -s "$configDir/$plexTrain" "/usr/local/share/$plexTrain" || exit
   echo "Relocated $plexTrain."
 else
@@ -56,8 +55,7 @@ else
 fi
 
 if [ ! -d "$configDir/$plexData" ] ; then
-  cp -Rv "/usr/local/$plexData" "$configDir/." || exit
-  rm -Rv "/usr/local/$plexData/" || exit
+  mv -Rv "/usr/local/$plexData" "$configDir/." || exit
   ln -s "$configDir/$plexData" "/usr/local/$plexData" || exit
   echo "Relocated $plexData."
 else
