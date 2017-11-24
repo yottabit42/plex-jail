@@ -13,7 +13,7 @@
 # https://docs.google.com/document/d/1LSr3J6hdnCDQHfiH45K3HMvEqzbug7GeUeDa_6b_Hhc
 #
 # Jacob McDonald
-# Revision 171123d-yottabit
+# Revision 171123e-yottabit
 #
 # Licensed under BSD-3-Clause, the Modified BSD License
 
@@ -64,9 +64,11 @@ fi
 
 if [ "$plexTrain" = "plexmediaserver-plexpass" ] ; then
   sysrc plexmediaserver_plexpass_enable=YES || exit
+  sleep 5
   service plexmediaserver_plexpass start || exit
 else
   sysrc plexmediaserver_enable=YES || exit
+  sleep 5
   service plexmediaserver start || exit
 fi
 
