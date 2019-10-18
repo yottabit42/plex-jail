@@ -55,7 +55,7 @@ else
 fi
 
 if [ ! -d "$configDir/$plexData" ] ; then
-  mv -v "/usr/local/$plexData" "$configDir/." || exit
+  mv -v "/usr/local/$plexData" "$configDir/."  # OK to proceed if fails.
   ln -s "$configDir/$plexData" "/usr/local/$plexData" || exit
   echo "Relocated $plexData."
 else
